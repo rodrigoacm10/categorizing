@@ -16,7 +16,7 @@ export class AuthService {
     const passwordCrypted = await bcrypt.hash(password, 10);
 
     const userExist = !!(await this.usersService.findByEmail(email));
-    if (userExist) return;
+    if (userExist) return false;
 
     const user = await this.usersService.create({
       name,

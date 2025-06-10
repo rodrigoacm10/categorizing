@@ -42,21 +42,25 @@ model Item {
 
 model Category {
   id String @id @default(uuid())
-  name String @unique
+  name String 
   userId String
 
   items Item[]
   options Option[]
   user User @relation(fields: [userId], references: [id])
+
+  @@unique([name, userId])
 }
 
 model Option {
   id String @id @default(uuid())
-  name String
+  name String 
   categoryId String
   userId String
 
   items Item[]
   category Category @relation(fields: [categoryId], references: [id])
   user User @relation(fields: [userId], references: [id])
+
+  @@unique([name, userId])
 }

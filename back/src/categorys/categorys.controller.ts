@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
   Post,
   Put,
   Query,
@@ -51,11 +52,14 @@ export class CategorysController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('/:id')
+  async getOneCategory(@Param('id') id: string) {
+    return this.categorysService.findOne(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Put('/')
-  async editCategory(
-    @Req() req: AuthenticatedRequest,
-    @Body() dto: EditCategoryDto,
-  ) {
+  async editCategory(@Body() dto: EditCategoryDto) {
     return this.categorysService.edit({ id: dto.id, name: dto.name });
   }
 

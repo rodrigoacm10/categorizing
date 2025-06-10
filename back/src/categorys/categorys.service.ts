@@ -21,12 +21,26 @@ export class CategorysService {
   constructor(private prismaService: PrismaService) {}
 
   async create(data: { name: string; userId: string }) {
-    const existing = await this.findByName(data.name);
+    const existing = await this.findByName({
+      name: data.name,
+      userId: data.userId,
+    });
     if (existing) {
       throw new ConflictException('Categoria já existe');
     }
 
     return await this.prismaService.category.create({ data });
+  }
+
+  async findOne(id: string) {
+    const existing = await this.prismaService.category.findUnique({
+      where: { id },
+    });
+    if (!existing) {
+      throw new NotFoundException('Categoria não econtrada');
+    }
+
+    return existing;
   }
 
   async findAll(userId: string) {
@@ -35,8 +49,10 @@ export class CategorysService {
     });
   }
 
-  async findByName(name: string) {
-    return await this.prismaService.category.findUnique({ where: { name } });
+  async findByName(data: { name: string; userId: string }) {
+    return await this.prismaService.category.findUnique({
+      where: { name_userId: { name: data.name, userId: data.userId } },
+    });
   }
 
   async findAllByName(data: { userId: string; name: string }) {
@@ -46,9 +62,7 @@ export class CategorysService {
   }
 
   async edit(data: { id: string; name: string }) {
-    const existing = await this.prismaService.category.findUnique({
-      where: { id: data.id },
-    });
+    const existing = await this.findOne(data.id);
     if (!existing) {
       throw new NotFoundException('Categoria não encontrada');
     }
@@ -60,9 +74,7 @@ export class CategorysService {
   }
 
   async delete(id: string) {
-    const existing = await this.prismaService.category.findUnique({
-      where: { id },
-    });
+    const existing = await this.findOne(id);
     if (!existing) {
       throw new NotFoundException('Categoria não econtrada');
     }

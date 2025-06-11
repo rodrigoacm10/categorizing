@@ -35,9 +35,14 @@ model Item {
   quantity Int
   userId String
 
-  options Option[]
-  categorys Category[]
+  // options Option[]
+  itemOptions ItemOption[]
+  // categorys Category[]
+  itemCategorys ItemCategory[]
+
   user User @relation(fields: [userId], references: [id])
+
+  @@unique([name, userId])
 }
 
 model Category {
@@ -45,7 +50,9 @@ model Category {
   name String 
   userId String
 
-  items Item[]
+  // items Item[]
+  itemCategorys ItemCategory[]
+
   options Option[]
   user User @relation(fields: [userId], references: [id])
 
@@ -58,9 +65,29 @@ model Option {
   categoryId String
   userId String
 
-  items Item[]
+  // items Item[]
+  itemOptions ItemOption[]
+
   category Category @relation(fields: [categoryId], references: [id])
   user User @relation(fields: [userId], references: [id])
 
   @@unique([name, userId])
+}
+
+model ItemOption {
+  id String @id @default(uuid())
+  itemId String
+  optionId String
+
+  item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  option Option @relation(fields: [optionId], references: [id])
+}
+
+model ItemCategory {
+  id String @id @default(uuid())
+  itemId String
+  categoryId String
+
+  item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id])
 }

@@ -8,9 +8,10 @@ import { CategorysModule } from './categorys/categorys.module';
 import { OptionsController } from './options/options.controller';
 import { OptionsService } from './options/options.service';
 import { OptionsModule } from './options/options.module';
+import { ItemsModule } from './items/items.module';
 
 @Module({
-  imports: [PrismaModule, UsersModule, AuthModule, CategorysModule, OptionsModule],
+  imports: [PrismaModule, UsersModule, AuthModule, CategorysModule, OptionsModule, ItemsModule],
   controllers: [AppController, OptionsController],
   providers: [AppService, OptionsService],
 })

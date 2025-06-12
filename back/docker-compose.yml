@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres_categorizing
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 14R16l03pos
+      POSTGRES_DB: categorizing
+    ports:
+      - '5433:5432' # mapeando a porta 5432 do container para 5433 da sua máquina
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
